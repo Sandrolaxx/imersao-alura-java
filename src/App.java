@@ -26,7 +26,7 @@ public class App {
         var response = restClient.send(httpRequestGet, BodyHandlers.ofString());
         var movieList = JsonUtil.parseJson(response.body());
 
-        for (ItemDto itemDto : movieList) {
+        for (ItemDto itemDto : movieList) {//Teste
             System.out.println(itemDto.getFullTitle());
         }
     }
