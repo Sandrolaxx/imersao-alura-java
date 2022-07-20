@@ -1,41 +1,47 @@
-import java.net.URI;
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse.BodyHandlers;
-
-import dto.ItemDto;
+import enums.EnumUserChoice;
+import pattern.RestClient;
+import service.MenuService;
 import service.StickerService;
-import utils.JsonUtil;
 
 public class App {
-    final static String BASE_URL = "https://mocki.io";
-    final static String API_VERSION = "/v1/";
-    final static String PATH_MOVIES = "67abcf2a-2cc4-4a9a-91e4-c1b65b61712c";
-
-    private static String getUrl() {
-        return BASE_URL.concat(API_VERSION).concat(PATH_MOVIES);
-    }
-
-    private static HttpRequest handleRequest(String path) {
-        return HttpRequest.newBuilder(URI.create(path)).GET().build();
-    }
 
     public static void main(String[] args) throws Exception {
-        var restClient = HttpClient.newHttpClient();
-        var httpRequestGet = handleRequest(getUrl());
         var stickerService = new StickerService();
+        var menuService = new MenuService();
+        var userOption = EnumUserChoice.SHOW_BEST_MOVIES;
+        
+        var moviesList = RestClient.fetchMovies();
+        var seriesList = RestClient.fetchSeries();
 
-        var response = restClient.send(httpRequestGet, BodyHandlers.ofString());
-        var movieList = JsonUtil.parseJson(response.body());
+        try {
+            while (!userOption.equals(EnumUserChoice.EXIT)) {
+                userOption = menuService.showMenu();
 
-        for (ItemDto itemDto : movieList) {
-            var urlInputStream = new URL(itemDto.getImage()).openStream();
-            var imgPath = "output/".concat(itemDto.getTitle()).concat(".png");
+                switch (userOption) {
+                    case SHOW_BEST_MOVIES:
+                        System.out.println("Lista Melhores Filmes \u2728\n");
 
-            stickerService.handleCreate(urlInputStream, imgPath, "TOP D++");
+                        moviesList.forEach(item -> System.out.println(item.getFullTitle()));
+                        break;
+                    case SHOW_BEST_SERIES:
+                        System.out.println("Lista Melhores Séries \uD83D\uDD25\n");
 
-            System.out.println(itemDto.getFullTitle());
+                        seriesList.forEach(item -> System.out.println(item.getFullTitle()));
+                        break;
+                    case GENERATE_STIKERS_BEST_MOVIES:
+                        stickerService.generateSticker(moviesList, true);
+                        break;
+                    case GENERATE_STIKERS_BEST_SERIES:
+                        stickerService.generateSticker(seriesList, false);
+                        break;
+                    case EXIT:
+                        System.out.println("Obrigado por usar nossa aplicação! \uD83D\uDE4F");
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
+
 }

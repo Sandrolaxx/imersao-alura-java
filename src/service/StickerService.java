@@ -1,19 +1,22 @@
 package service;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.awt.image.BufferedImage;
-import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.Font;
+import java.net.URL;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import dto.ItemDto;
+
 public class StickerService {
 
-    public void handleCreate(final InputStream inputStream, final String filePath,
+    private void handleCreate(final InputStream inputStream, final String filePath,
             final String phrase) throws IOException {
 
         var originalImg = ImageIO.read(inputStream);
@@ -39,6 +42,22 @@ public class StickerService {
         }
 
         ImageIO.write(newImg, "png", file);
+
+    }
+
+    public void generateSticker(List<ItemDto> itemList, boolean isMoviesSticker) throws IOException {
+        var folderPath = isMoviesSticker ? "movies/" : "series/";
+
+        System.out.println("Gerando stickers............\uD83D\uDE38\n");
+
+        for (ItemDto itemDto : itemList) {
+            var urlInputStream = new URL(itemDto.getImage()).openStream();
+            var imgPath = "output/".concat(folderPath).concat(itemDto.getTitle()).concat(".png");
+
+            handleCreate(urlInputStream, imgPath, "TOP ++");
+
+            System.out.println(itemDto.getFullTitle().concat("..........Gerado com sucesso sticker!\uD83C\uDFAF"));
+        }
 
     }
 
