@@ -1,5 +1,7 @@
 package dto;
 
+import utils.StringUtil;
+
 public class ItemDto {
     
     private String id;
@@ -19,6 +21,8 @@ public class ItemDto {
     private String imDbRating;
     
     private String imDbRatingCount;
+
+    private Integer userVote = 0;
 
     public String getId() {
         return id;
@@ -90,6 +94,30 @@ public class ItemDto {
 
     public void setImDbRatingCount(String imDbRatingCount) {
         this.imDbRatingCount = imDbRatingCount;
+    }
+    
+    public Integer getUserVote() {
+        return userVote;
+    }
+
+    public void setUserVote(Integer userVote) {
+        this.userVote = userVote;
+    }
+
+    @Override
+    public String toString() {
+        var sb = new StringBuilder();
+        
+        sb.append("\nNome: ".concat(title));
+        sb.append("\nAno de lançamento: ".concat(year));
+        sb.append("\nNota IMDB: ".concat(imDbRating).concat(StringUtil.getStarRating(Double.parseDouble(imDbRating))));
+        sb.append("\nNota Usuário Aplicação: ".concat(userVote.toString()));
+
+        return sb.toString();
+    }
+
+    public void printData() {
+        System.out.println(this.toString());
     }
 
 }
