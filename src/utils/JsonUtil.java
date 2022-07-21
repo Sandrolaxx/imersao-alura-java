@@ -11,7 +11,7 @@ public class JsonUtil {
 
     public static List<ItemDto> parseJson(String json) {
         json = json.replace("{\"items\":[", "");
-        json = json.replace("]", "");
+        json = json.replace("]", ",");
 
         var listItem = new ArrayList<ItemDto>();
 

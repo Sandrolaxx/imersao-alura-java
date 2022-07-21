@@ -31,7 +31,7 @@ public class MenuService {
             System.out.println("|             OPÇÃO INVÁLIDA!              |");
             System.out.println("|------------------------------------------|");
 
-            showMenu();
+            enumOption = showMenu();
         }
 
         return enumOption;
@@ -60,7 +60,7 @@ public class MenuService {
                     System.out.println("Lista Melhores Séries \uD83D\uDD25");
 
                     seriesList.forEach(ItemDto::printData);
-                    handleUserVote(moviesList);
+                    handleUserVote(seriesList);
 
                     break;
                 case GENERATE_STIKERS_BEST_MOVIES:
@@ -81,7 +81,7 @@ public class MenuService {
 
     private List<ItemDto> handleUserVote(List<ItemDto> itemsList) {
 
-        System.out.println("\nDeseja votar em um filme? [S/N]");
+        System.out.println("\nDeseja votar em um título? [S/N]");
         var isVote = option.next().charAt(0);
         
         if (isVote == 'S') {
@@ -93,19 +93,19 @@ public class MenuService {
             var rate =  userRate.next().charAt(0);
 
             try {
-                var selectedItem = itemsList.get(Integer.valueOf(String.valueOf(rate)));
+                var selectedItem = itemsList.get(Integer.valueOf(String.valueOf(rate)) - 1);
 
                 if (selectedItem != null) {
-                    itemsList.get(Integer.valueOf(String.valueOf(rate))).setUserVote(selectedItem.getUserVote() + 1);
+                    itemsList.get(Integer.valueOf(String.valueOf(rate)) - 1).setUserVote(selectedItem.getUserVote() + 1);
                 }
 
-                System.out.println("\nObrigado por votar!");
+                System.out.println("\nObrigado por votar!\uD83D\uDC97");
             } catch (Exception e) {
-                System.out.println("\nOpção inválida!");
+                System.out.println("\nOpção inválida!\uD83D\uDE45");
             }
 
         } else if (isVote != 'N') {
-            System.out.println("\nOpção inválida!");
+            System.out.println("\nOpção inválida!\uD83D\uDE45");
         }
 
         return itemsList;

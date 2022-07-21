@@ -46,15 +46,16 @@ public class StickerService {
     }
 
     public void generateSticker(List<ItemDto> itemList, boolean isMoviesSticker) throws IOException {
+        var generateName = isMoviesSticker ? "Filme" : "Série";
         var folderPath = isMoviesSticker ? "movies/" : "series/";
 
-        System.out.println("Gerando stickers............\uD83D\uDE38\n");
+        System.out.println("Gerando Stickers Melhores ".concat(generateName).concat("s............\uD83D\uDE38\n"));
 
         for (ItemDto itemDto : itemList) {
             var urlInputStream = new URL(itemDto.getImage()).openStream();
             var imgPath = "output/".concat(folderPath).concat(itemDto.getTitle()).concat(".png");
 
-            handleCreate(urlInputStream, imgPath, "TOP ++");
+            handleCreate(urlInputStream, imgPath, generateName.toUpperCase().concat(" TOP D++++"));
 
             System.out.println(itemDto.getFullTitle().concat("..........Gerado com sucesso sticker!\uD83C\uDFAF"));
         }

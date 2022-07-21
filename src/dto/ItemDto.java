@@ -111,7 +111,7 @@ public class ItemDto {
         sb.append("\nNome: ".concat(title));
         sb.append("\nAno de lançamento: ".concat(year));
         sb.append("\nNota IMDB: ".concat(imDbRating).concat(StringUtil.getStarRating(Double.parseDouble(imDbRating))));
-        sb.append("\nNota Usuário Aplicação: ".concat(userVote.toString()));
+        sb.append("\nVotos Usuário da Aplicação: ".concat(userVote.toString()));
 
         return sb.toString();
     }
